@@ -1,0 +1,28 @@
+---
+version: '2.1'
+
+services:
+  mongodb:
+    image: mongo:4.4.2
+    mem_limit: 512m
+    ports:
+      - "27017:27017"
+    command: mongod
+    healthcheck:
+      test: "mongo --eval 'db.stats().ok'"
+      interval: 5s
+      timeout: 2s
+      retries: 60
+
+  graphql:
+    build:
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    mem_limit: 512m
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "16400:5005" #debug port
+      - "8080:8080" #graphiql port

@@ -1,0 +1,34 @@
+type Stock {
+    id: ID!,
+    offeringId: String!,
+    address: Address!
+    quantity: Int!
+}
+
+type Address {
+    id: ID!,
+    fullAddress: String
+}
+
+type Offering {
+    id: ID!,
+    name: String!,
+    stocks: [Stock]
+}
+
+type Query {
+    allOfferings:[Offering]
+    allAddresses:[Address]
+}
+
+type Mutation {
+    addAddress(fullAddress: String!):Address
+    addOffering(name: String!):Offering
+    addStock(offeringId: String!, addressId: String!, quantity: Int!):Stock
+    updateStock(stockId: String!, quantity: Int!):Stock
+}
+
+type Subscription {
+    subscribeStocks: [Stock]
+    offeringStocks(offeringId: String!): [Stock]
+}
